@@ -15,11 +15,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # Setup Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+
+    # Install cookiecutter
+    - name: Install and Run Cookiecutter
+      run: |
+        pip install cookiecutter
+        cookiecutter . --no-input
+
     # Create and Activate Conda Env
     - uses: conda-incubator/setup-miniconda@v2
       with:
-        activate-environment: {{ cookiecutter.project_slug }}
-        environment-file: environment.yml
+        activate-environment: test-env
+        environment-file: a-cookiecutter-repository-for-quarto/.environment.yml
 
     - name: Set up Quarto
       uses: quarto-dev/quarto-actions/setup@v2
@@ -35,7 +45,5 @@ jobs:
     - name: Build webpage
       shell: bash -l {0}
       run: |
-        pip install cookiecutter
-        cookiecutter . --no-input
         cd a-cookiecutter-repository-for-quarto/
         just build
