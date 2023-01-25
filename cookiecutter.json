@@ -1,0 +1,6 @@
+{
+    "author_name": "Jane Doe",
+    "hosting_github_username_or_org": "JaneCodes",
+    "project_name": "A Cookiecutter Repository for Quarto",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-')}}"
+  }

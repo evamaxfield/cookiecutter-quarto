@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: 0 18 * * MON
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Create and Activate Conda Env
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: {{ cookiecutter.project_slug }}
+        environment-file: environment.yml
+
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+
+    # Install Tex Deps
+    - run: |
+        sudo apt-get install \
+          texlive-xetex \
+          texlive-fonts-recommended \
+          texlive-plain-generic
+
+    # Build Project
+    - name: Build webpage
+      shell: bash -l {0}
+      run: |
+        pip install cookiecutter
+        cookiecutter . --no-input
+        cd a-cookiecutter-repository-for-quarto/
+        just build

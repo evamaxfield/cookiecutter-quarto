@@ -1,0 +1,42 @@
+---
+title: "{{ cookiecutter.project_name }}"
+author: "{{ cookiecutter.author_name }}"
+
+abstract: "Some abstract!"
+
+# Styling
+# See Quarto docs for more details on styling
+# This link is for styling options specific to HTML outputs
+# https://quarto.org/docs/reference/formats/html.html
+
+## Basics
+bibliography: support/main.bib
+
+## Citation Style Language
+# See https://github.com/citation-style-language/styles for more options
+# We default to PNAS (Proceedings of the National Academy of Sciences)
+csl: support/pnas.csl
+
+## Specific for target format
+format:
+  html:
+    code-tools: true
+    standalone: true
+    embed-resources: true
+    toc: true
+    toc-location: left
+    reference-location: margin
+    citation-location: margin
+---
+
+::: {.callout-note appearance="simple" .content-visible when-format="html"}
+The web version of this paper updates weekly.
+:::
+
+## Introduction
+
+Some content!
+
+::: {.content-visible unless-format="html"}
+## References
+:::

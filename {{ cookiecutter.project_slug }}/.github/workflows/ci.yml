@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * MON
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Create and Activate Conda Env
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: {{ cookiecutter.project_slug }}
+        environment-file: environment.yml
+
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+
+    # Install Tex Deps
+    - run: |
+        sudo apt-get install \
+          texlive-xetex \
+          texlive-fonts-recommended \
+          texlive-plain-generic
+
+    # Build Project
+    - name: Build Project
+      shell: bash -l {0}
+      run: |
+        just build
+
+    # Store Static File(s) as Artifact(s)
+    - uses: actions/upload-artifact@v3
+      with:
+        name: {{ cookiecutter.project_slug }}-static
+        path: |
+          _build/index.pdf
+          _build/index.docx
+      
+    # Publish to GH Pages
+    - name: Publish to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: _build/
