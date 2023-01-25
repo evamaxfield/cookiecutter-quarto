@@ -24,6 +24,7 @@ jobs:
       run: |
         pip install cookiecutter
         cookiecutter . --no-input
+        ls -la
 
     # Create and Activate Conda Env
     - uses: conda-incubator/setup-miniconda@v2
